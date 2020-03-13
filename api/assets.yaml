@@ -18,6 +18,8 @@ paths:
             schema:
               type: object
               properties:
+              # EAR Note:  These are mutually exclusive but that is not yet represented here.  
+              # Need to at least make a comment in descriptions or use one of the strategies you will find in this PR.
                 logo:
                   type: string
                   format: binary
