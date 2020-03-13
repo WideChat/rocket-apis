@@ -1,0 +1,119 @@
+openapi: 3.0.1
+info:
+  title: Assets Methods
+  description: Set and unset assets by name
+  version: "1.0.0"
+servers:
+  - url: 'http://localhost:3000'
+paths:
+  "/api/v1/assets.setAsset":
+    post:
+      description: Set an asset image by name.
+      parameters:
+      - name: X-User-Id
+        in: header
+        schema:
+          type: string
+        example: bszJr4E8EHAtLqfX4
+      - name: X-Auth-Token
+        in: header
+        schema:
+          type: string
+        example: V7503jm6uI4r7dTD0kHkWK6_NKV4NfgydJagYlfNmNw
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: string
+              required:
+              - assetName
+              properties:
+                assetName:
+                  type: string
+                  example: myLogo.png
+                  description: Asset File to upload.
+                refreshAllClients:
+                  type: boolean
+                  example: false
+                  description: If needs refresh all clients to apply changes immediately.
+            examples:
+              '0':
+                value: '"logo=talentals.png"'
+      responses:
+        '200':
+          description: Set an asset by name. Requires `manage-assets` permission.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+              examples:
+                '0':
+                  value: |-
+                    {
+                      "success": true
+                    }
+      servers:
+      - url: http://localhost:3000
+    servers:
+    - url: http://localhost:3000
+  "/api/v1/assets.unsetAsset":
+    post:
+      description: Unset an asset by name.
+      parameters:
+      - name: X-User-Id
+        in: header
+        schema:
+          type: string
+        example: bszJr4E8EHAtLqfX4
+      - name: X-Auth-Token
+        in: header
+        schema:
+          type: string
+        example: zLK-ryssnND2u8duZTv9Dy9_-6_IJVncpvUPKtzGrvn
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+              - assetName
+              properties:
+                refreshAllClients:
+                  type: boolean
+                  example: true
+                  description: If needs refresh all clients to apply changes immediately.
+                assetName:
+                  type: string
+                  example: logo
+                  description: Asset name to unset.
+            examples:
+              '0':
+                value: '{ "assetName": "logo", "refreshAllClients": true}'
+      responses:
+        '200':
+          description: Unset an asset by name. Requires `manage-assets` permission.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+              examples:
+                '0':
+                  value: |-
+                    {
+                      "success": true
+                    }
+      servers:
+      - url: http://localhost:3000
+    servers:
+    - url: http://localhost:3000
+components:
+  securitySchemes:
+    basic:
+      type: http
+      scheme: basic
