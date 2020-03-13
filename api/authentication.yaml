@@ -17,72 +17,66 @@ paths:
         content:
           application/json:
             schema:
-              type: object
-              required:
-              - user
-              - password
-              - serviceName
-              - accessToken
-              - secret
-              - idToken
-              - scope
-              - expiresIn
-              - accessTokenSecret
-              - appSecret
-              - appId
-              properties:
-                user:
-                  type: string
-                  example: foo@bar.com OR myusername
-                  description: Your username or email
-                password:
-                  type: string
-                  example: password1234
-                  description: Your password
-                code:
-                  type: string
-                  example: 1234
-                  description: Your two factor authentication code
-                serviceName:
-                  type: string
-                  example: google, facebook, twitter
-                  description: The desired OAuth service name
-                accessToken:
-                  type: string
-                  example: hash
-                  description: Access token provided by the service
-                expiresIn:
-                  type: integer
-                  example: 200
-                  description: Lifetime of token (in seconds)
-                secret:
-                  type: string
-                  example: hash
-                  description: The secret provided by facebook for app
-                idToken:
-                  type: string
-                  example: hash
-                  description: Id token provided by google auth
-                scope:
-                  type: string
-                  example: profile
-                  description: Google scopes for API
-                accessTokenSecret:
-                  type: string
-                  example: hash
-                  description: Access token secret provided by twitter oauth
-                appSecret:
-                  type: string
-                  example: hash
-                  description: The secret provided by twitter for app
-                appId:
-                  type: string
-                  example: hash
-                  description: The id provided by twitter for app
-                identity:
-                  type: string
-                  example: "{id: '1', name: 'rocket.cat'}"
-                  description: Service user identity
+             oneOf:
+              - type: object
+                required:
+                  - user
+                  - password
+                properties:
+                  user:
+                    type: string
+                    example: foo@bar.com OR myusername
+                    description: Your username or email
+                  password: 
+                    type: string
+                    example: password1234
+                    description: Your password
+                  code:
+                    type: string
+                    example: 1234
+                    description: Your two factor authentication code
+              - type: object
+                required:
+                  - serviceName
+                  - accessToken
+                  - expiresIn
+                properties:
+                  serviceName:
+                    type: string
+                    example: google, facebook, twitter
+                    description: The desired OAuth service name
+                  accessToken:
+                    type: string
+                    example: hash
+                    description: Access token provided by the service
+                  expiresIn:
+                    type: integer
+                    example: 200
+                    description: Lifetime of token (in seconds)
+                  secret:
+                    type: string
+                    example: hash
+                    description: The secret provided by facebook for app
+                  idToken:
+                    type: string
+                    example: hash
+                    description: Id token provided by google auth
+                  scope:
+                    type: string
+                    example: profile
+                    description: Google scopes for API
+                  accessTokenSecret:
+                    type: string
+                    example: hash
+                    description: Access token secret provided by twitter oauth
+                  appSecret:
+                    type: string
+                    example: hash
+                    description: The secret provided by twitter for app
+                  appId:
+                    type: string
+                    example: hash
+                    description: The id provided by twitter for app
             examples:
               '0':
                 value: |-
@@ -294,16 +288,8 @@ paths:
     post:
       description: Invalidate your REST API authentication token.
       parameters:
-      - name: X-User-Id
-        in: header
-        schema:
-          type: string
-        example: bszJr4E8EHAtLqfX4
-      - name: X-Auth-Token
-        in: header
-        schema:
-          type: string
-        example: Ge9erAk9_E83RRaYti2WT-6-lbxVu_Ll9iV0AdMtGI6
+        - $ref: '#/components/parameters/user-id'
+        - $ref: '#/components/parameters/auth-token'
       responses:
         '200':
           description: Invalidate your REST API authentication token.
@@ -336,16 +322,8 @@ paths:
     get:
       description: Displays information about the authenticated user.
       parameters:
-      - name: X-User-Id
-        in: header
-        schema:
-          type: string
-        example: bszJr4E8EHAtLqfX4
-      - name: X-Auth-Token
-        in: header
-        schema:
-          type: string
-        example: TdYcM_4SP8R1no0-pytKAfyiKUih24DswM6AMoYeqS7
+        - $ref: '#/components/parameters/user-id'
+        - $ref: '#/components/parameters/auth-token'
       responses:
         '200':
           description: Quick information about the authenticated user.
@@ -517,7 +495,23 @@ paths:
     servers:
     - url: http://localhost:3000
 components:
+  parameters:
+    user-id:
+      name: X-User-Id
+      in: header
+      required: true
+      schema:
+        type: string
+        example: bszJr4E8EHAtLqfX4
+    auth-token:
+      name: X-Auth-Token
+      in: header
+      required: true
+      schema:
+        type: string
+        example: TdYcM_4SP8R1no0-pytKAfyiKUih24DswM6AMoYeqS7
   securitySchemes:
+    # IS THIS CORRECT?
     basic:
       type: http
       scheme: basic

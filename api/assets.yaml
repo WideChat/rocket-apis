@@ -10,35 +10,52 @@ paths:
     post:
       description: Set an asset image by name.
       parameters:
-      - name: X-User-Id
-        in: header
-        schema:
-          type: string
-        example: bszJr4E8EHAtLqfX4
-      - name: X-Auth-Token
-        in: header
-        schema:
-          type: string
-        example: V7503jm6uI4r7dTD0kHkWK6_NKV4NfgydJagYlfNmNw
+      - $ref: '#/components/parameters/user-id'
+      - $ref: '#/components/parameters/auth-token'
       requestBody:
         content:
           multipart/form-data:
             schema:
-              type: string
-              required:
-              - assetName
+              type: object
               properties:
-                assetName:
+              # EAR Note:  These are mutually exclusive but that is not yet represented here.  
+              # Need to at least make a comment in descriptions or use one of the strategies you will find in this PR.
+                logo:
                   type: string
+                  format: binary
                   example: myLogo.png
                   description: Asset File to upload.
+                background:
+                  type: string
+                  format: binary
+                  example: myBackground (svg, png, jpg)
+                  description: Asset File to upload.
+                favicon:
+                  type: string
+                  format: binary
+                  example: myLogo (svg, png, jpg)
+                  description: Asset File to upload.
+                favicon_ico:
+                  type: string
+                  format: binary
+                  example: myLogo.ico
+                  description: Asset File to upload.
+                favicon_16:
+                  type: string
+                  format: binary
+                  example: myLogo.png
+                  description: Asset File to upload.
+                favicon_32:
+                  type: string
+                  format: binary
+                  example: myLogo.png
+                  description: Asset File to upload.
+                # TODO [favicon_192, favicon_512, touchicon_180, touchicon_180_pre, tile_70, tile_144, tile_150, tile_310_square, tile_310_wide, safari_pinned ]]
                 refreshAllClients:
-                  type: boolean
-                  example: false
-                  description: If needs refresh all clients to apply changes immediately.
-            examples:
-              '0':
-                value: '"logo=talentals.png"'
+                  $ref: '#/components/schemas/refreshAllClients'
+            # examples:
+            #   '0':
+            #     value: '{ "logo": "myLogo.png" }'
       responses:
         '200':
           description: Set an asset by name. Requires `manage-assets` permission.
@@ -63,16 +80,8 @@ paths:
     post:
       description: Unset an asset by name.
       parameters:
-      - name: X-User-Id
-        in: header
-        schema:
-          type: string
-        example: bszJr4E8EHAtLqfX4
-      - name: X-Auth-Token
-        in: header
-        schema:
-          type: string
-        example: zLK-ryssnND2u8duZTv9Dy9_-6_IJVncpvUPKtzGrvn
+      - $ref: '#/components/parameters/user-id'
+      - $ref: '#/components/parameters/auth-token'
       requestBody:
         content:
           application/json:
@@ -82,9 +91,7 @@ paths:
               - assetName
               properties:
                 refreshAllClients:
-                  type: boolean
-                  example: true
-                  description: If needs refresh all clients to apply changes immediately.
+                  $ref: '#/components/schemas/refreshAllClients'
                 assetName:
                   type: string
                   example: logo
@@ -113,7 +120,28 @@ paths:
     servers:
     - url: http://localhost:3000
 components:
+  parameters:
+    user-id:
+      name: X-User-Id
+      in: header
+      required: true
+      schema:
+        type: string
+        example: bszJr4E8EHAtLqfX4
+    auth-token:
+      name: X-Auth-Token
+      in: header
+      required: true
+      schema:
+        type: string
+        example: TdYcM_4SP8R1no0-pytKAfyiKUih24DswM6AMoYeqS7
+  schemas:
+    refreshAllClients:
+      type: boolean
+      example: true
+      description: If needs refresh all clients to apply changes immediately.
   securitySchemes:
+    # IS THIS CORRECT?
     basic:
       type: http
       scheme: basic
