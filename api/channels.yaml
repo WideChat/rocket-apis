@@ -518,19 +518,19 @@ paths:
         content:
           application/json:
             schema:
-              type: object
-              required:
-              - roomId
-              - roomName
-              properties:
-                roomId:
-                  type: string
-                  example: LAH2isR5nqnY7xdLA
-                  description: The channel’s id
-                roomName:
-                  type: string
-                  example: channelname
-                  description: The channel’s name
+             oneOf:
+               - type: object
+                 properties:
+                   roomId:
+                     type: string
+                     example: LAH2isR5nqnY7xdLA
+                     description: The channel’s id
+               - type: object
+                 properties:
+                   roomName:
+                     type: string
+                     example: channelname
+                     description: The channel’s name
       responses:
         '200':
           description: Remove a public channel.
